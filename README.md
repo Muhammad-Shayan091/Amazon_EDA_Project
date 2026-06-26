@@ -23,13 +23,16 @@
 
 ## 📖 About the Project
 
-This project digs deep into Amazon India's product listings to answer:
-- Which categories dominate Amazon India?
-- Do expensive products get better ratings?
-- Which categories offer the biggest discounts?
-- What makes a product the "Best Value Deal"?
-- Is popularity (review count) linked to quality (rating)?
-- How much money do customers actually save?
+This project digs deep into Amazon India's product listings to uncover **not just what the data shows — but why it occurs and what it means for buyers and sellers.**
+
+- Why does Electronics dominate Amazon India's catalog?
+- Why do expensive products NOT always get better ratings?
+- Why do certain categories offer 70%+ discounts consistently?
+- Why does discount percentage have no link with product quality?
+- Why do the most reviewed products cluster around 4.0 rating?
+- Why is January the best month for content additions?
+- Why does price have almost zero correlation with rating?
+- Why does popularity NOT guarantee quality on Amazon?
 
 ---
 
@@ -57,7 +60,6 @@ After downloading, place `amazon.csv` in the same folder as `amazon_eda.py`.
 amazon-eda/
 │
 ├── amazon_eda.py                    ← Main EDA script
-├── amazon_new_insights.py           ← Additional insights (Step 15-24)
 ├── README.md                        ← Project documentation
 │
 ├── 01_top_categories.png            ← Top 10 product categories
@@ -100,17 +102,16 @@ amazon-eda/
 | 11 | Avg Rating by Category | Color Bar | Which category is highest rated |
 | 12 | Money Saved | Bar Chart | Average savings per category |
 | 13 | Discount Distribution | Histogram | How discounts are distributed |
-| 14 | Final Summary I | — | First set of key metrics |
-| 15 | Rating Quality Segments | Donut Chart | Poor / Average / Good / Excellent split |
-| 16 | Best Value Products | Scatter | High rating + high discount = best deal |
-| 17 | Top Sub-Categories | Horizontal Bar | Second-level category breakdown |
-| 18 | High Discount (70%+) | Bar Chart | Categories with massive discounts |
-| 19 | Price vs Rating | Scatter + Trend | Does price affect product quality? |
-| 20 | Avg Discount by Category | Color Bar | Which category discounts most |
-| 21 | Reviews vs Rating | Scatter | Does popularity = quality? |
-| 22 | Top Rated Products | Horizontal Bar | Highest rated (min. 100 reviews) |
-| 23 | Actual vs Discounted Price | Grouped Bar | Price gap per category |
-| 24 | Final Summary II | — | Complete metrics summary |
+| 14 | Rating Quality Segments | Donut Chart | Poor / Average / Good / Excellent split |
+| 15 | Best Value Products | Scatter | High rating + high discount = best deal |
+| 16 | Top Sub-Categories | Horizontal Bar | Second-level category breakdown |
+| 17 | High Discount (70%+) | Bar Chart | Categories with massive discounts |
+| 18 | Price vs Rating | Scatter + Trend | Does price affect product quality? |
+| 19 | Avg Discount by Category | Color Bar | Which category discounts most |
+| 20 | Reviews vs Rating | Scatter | Does popularity = quality? |
+| 21 | Top Rated Products | Horizontal Bar | Highest rated (min. 100 reviews) |
+| 22 | Actual vs Discounted Price | Grouped Bar | Price gap per category |
+| 23 | Final Summary | — | All key metrics in one place |
 
 ---
 
