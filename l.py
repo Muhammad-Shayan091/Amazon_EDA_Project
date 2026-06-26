@@ -1144,7 +1144,6 @@ print(f"Remaining Rows         : {len(amazon_data)}")
 # # STEP 21: REVIEW COUNT vs RATING
 # # WHAT IT SHOWS: DO MORE REVIEWED PRODUCTS HAVE BETTER RATINGS?
 # # POPULAR PRODUCTS MAY OR MAY NOT BE HIGHLY RATED
-# # CHART TYPE: SCATTER — REVEALS POPULARITY VS QUALITY
 # # ============================================================
 # print("\n" + "=" * 60)
 # print("STEP 21: REVIEW COUNT vs RATING ANALYSIS")
@@ -1198,74 +1197,125 @@ print(f"Remaining Rows         : {len(amazon_data)}")
 
 
 # # ============================================================
-# # STEP 22: TOP 10 HIGHEST RATED PRODUCTS
-# # WHAT IT SHOWS: WHICH PRODUCTS HAVE THE PERFECT RATING
-# # nlargest() WITH FILTER FOR SUFFICIENT REVIEWS
-# # CHART TYPE: HORIZONTAL BAR — CLEAN RANKING VIEW
+# # STEP 22: TOP 8 HIGHEST RATED PRODUCTS
+# # WHAT IT SHOWS: HIGHEST RATED PRODUCTS WITH AT LEAST 100 REVIEWS
 # # ============================================================
+
 # print("\n" + "=" * 60)
-# print("STEP 22: TOP 10 HIGHEST RATED PRODUCTS")
+# print("STEP 22: TOP 8 HIGHEST RATED PRODUCTS")
 # print("=" * 60)
 
-# # FILTER PRODUCTS WITH AT LEAST 100 REVIEWS FOR CREDIBILITY
+# # Filter products with at least 100 reviews
 # credible_products = amazon_data[
 #     amazon_data['rating_count_clean'] >= 100
-# ]
+# ].copy()
 
+# # Remove duplicate products
+# credible_products = credible_products.drop_duplicates(subset='product_name')
+
+# # Top 8 highest-rated products
 # top_rated_products = (
-#     credible_products.nlargest(10, 'rating_clean')
-#     [['product_name', 'rating_clean',
-#       'rating_count_clean', 'discounted_price_clean']]
+#     credible_products
+#     .sort_values(
+#         ['rating_clean', 'rating_count_clean'],
+#         ascending=[False, False]
+#     )
+#     .head(8)
 #     .reset_index(drop=True)
 # )
-# top_rated_products['short_name'] = (
-#     top_rated_products['product_name'].str[:35] + '..'
-# )
-# print(top_rated_products[['short_name', 'rating_clean',
-#                            'rating_count_clean']])
 
-# fig, axis = plt.subplots(figsize=(14, 8), facecolor=COLOR_DARK)
+# # Short names
+# top_rated_products['short_name'] = (
+#     top_rated_products['product_name']
+#     .str.slice(0, 35)
+#     .str.rstrip() + "..."
+# )
+
+# print(
+#     top_rated_products[
+#         ['short_name', 'rating_clean', 'rating_count_clean']
+#     ].to_string(index=False)
+# )
+
+# # Figure
+# fig, axis = plt.subplots(figsize=(15, 7), facecolor=COLOR_DARK)
 # axis.set_facecolor(COLOR_SURFACE)
 
-# bar_gold_colors = [COLOR_ORANGE if i == 0 else
-#                    COLOR_BLUE if i < 3 else COLOR_GREEN
-#                    for i in range(len(top_rated_products))]
+# # Bar colors
+# colors = [
+#     COLOR_ORANGE if i == 0 else
+#     COLOR_BLUE if i < 3 else
+#     COLOR_GREEN
+#     for i in range(len(top_rated_products))
+# ]
 
 # bars = axis.barh(
-#     top_rated_products['short_name'][::-1],
-#     top_rated_products['rating_clean'][::-1],
-#     color=bar_gold_colors[::-1],
-#     edgecolor='none', height=0.6
+#     top_rated_products['short_name'],
+#     top_rated_products['rating_clean'],
+#     color=colors,
+#     edgecolor='none',
+#     height=0.6
 # )
 
+# # Highest at top
+# axis.invert_yaxis()
+
+# # Data labels
 # for bar, rating, count in zip(
 #     bars,
-#     top_rated_products['rating_clean'][::-1],
-#     top_rated_products['rating_count_clean'][::-1]
+#     top_rated_products['rating_clean'],
+#     top_rated_products['rating_count_clean']
 # ):
-#     axis.text(
-#         bar.get_width() + 0.01,
-#         bar.get_y() + bar.get_height() / 2,
-#         f'⭐{rating}  ({int(count):,} reviews)',
-#         va='center', color='white',
-#         fontweight='bold', fontsize=9
+#     axis.annotate(
+#         f"⭐ {rating:.1f} ({int(count):,} reviews)",
+#         xy=(bar.get_width(), bar.get_y() + bar.get_height()/2),
+#         xytext=(8, 0),
+#         textcoords="offset points",
+#         va="center",
+#         ha="left",
+#         fontsize=9,
+#         fontweight="bold",
+#         color="white",
+#         clip_on=False
 #     )
 
-# axis.set_xlim(0, 6.0)
-# axis.set_title('🥇 Top 10 Highest Rated Products\n(Min. 100 Reviews for Credibility)',
-#                fontsize=14, fontweight='bold', color='white', pad=20)
-# axis.set_xlabel('Rating', fontsize=12)
+# # Formatting
+# axis.set_xlim(0, 5.2)
+
+# axis.set_title(
+#     "🥇 Top 8 Highest Rated Products\n(Min. 100 Reviews for Credibility)",
+#     fontsize=14,
+#     fontweight='bold',
+#     color='white',
+#     pad=20
+# )
+
+# axis.set_xlabel("Rating", fontsize=12, color='white')
+# axis.set_ylabel("")
+
 # axis.grid(axis='x', alpha=0.3)
+
+# axis.tick_params(axis='x', colors='white')
+# axis.tick_params(axis='y', colors='white')
+
 # axis.spines['top'].set_visible(False)
 # axis.spines['right'].set_visible(False)
 
+# plt.subplots_adjust(right=0.84)
 # plt.tight_layout()
-# plt.savefig('18_top_rated_products.png', dpi=180, bbox_inches='tight',
-#             facecolor=COLOR_DARK)
+
+# plt.savefig(
+#     "18_top_rated_products.png",
+#     dpi=180,
+#     bbox_inches='tight',
+#     facecolor=COLOR_DARK
+# )
+
 # plt.show()
+
 # print("SAVED: 18_top_rated_products.png")
-# print("📌 INSIGHT: Top rated products span across multiple categories,")
-# print("   showing that quality isn't limited to one specific category.")
+# print("📌 INSIGHT: The top-rated products (minimum 100 reviews) span multiple categories,")
+# print("   indicating that outstanding customer satisfaction is achieved across diverse product types.")
 
 
 # # ============================================================
@@ -1329,67 +1379,66 @@ print(f"Remaining Rows         : {len(amazon_data)}")
 # print("   the biggest gap after discount — best savings opportunity!")
 
 
-# # ============================================================
-# # STEP 24: UPDATED FINAL INSIGHTS SUMMARY
-# # PURE PANDAS & NUMPY — ALL KEY NUMBERS IN ONE PLACE
-# # ============================================================
-# print("\n" + "=" * 60)
-# print("STEP 24: FINAL INSIGHTS SUMMARY")
-# print("=" * 60)
+# ============================================================
+# STEP 24: UPDATED FINAL INSIGHTS SUMMARY
+# PURE PANDAS & NUMPY — ALL KEY NUMBERS IN ONE PLACE
+# ============================================================
+print("\n" + "=" * 60)
+print("STEP 24: FINAL INSIGHTS SUMMARY")
+print("=" * 60)
 
-# # CALCULATE ALL SUMMARY METRICS
-# total_products_count      = len(amazon_data)
-# total_categories_count    = amazon_data['main_category'].nunique()
-# top_category_name         = amazon_data['main_category'].value_counts().idxmax()
-# top_subcategory_name      = amazon_data['sub_category'].value_counts().idxmax()
-# overall_avg_rating        = np.round(np.mean(amazon_data['rating_clean'].dropna()), 2)
-# overall_avg_discount      = np.round(np.mean(amazon_data['discount_percentage_clean'].dropna()), 1)
-# overall_avg_actual_price  = np.round(np.mean(amazon_data['actual_price_clean'].dropna()), 0)
-# overall_avg_disc_price    = np.round(np.mean(amazon_data['discounted_price_clean'].dropna()), 0)
-# overall_avg_savings       = np.round(np.mean(amazon_data['money_saved'].dropna()), 0)
-# highest_discount_product  = amazon_data.nlargest(1, 'discount_percentage_clean')['discount_percentage_clean'].values[0]
-# most_reviewed_product     = amazon_data.nlargest(1, 'rating_count_clean')['product_name'].values[0][:40]
-# best_rated_category_name  = amazon_data.groupby('main_category')['rating_clean'].mean().idxmax()
-# best_discount_category    = amazon_data.groupby('main_category')['discount_percentage_clean'].mean().idxmax()
-# excellent_products_count  = len(amazon_data[amazon_data['rating_clean'] >= 4.5])
-# budget_products_count     = len(amazon_data[amazon_data['discounted_price_clean'] <= 500])
-# high_discount_count       = len(amazon_data[amazon_data['discount_percentage_clean'] >= 70])
-# price_rating_corr_val     = np.round(np.corrcoef(
-#     amazon_data.dropna(subset=['discounted_price_clean','rating_clean'])['discounted_price_clean'],
-#     amazon_data.dropna(subset=['discounted_price_clean','rating_clean'])['rating_clean']
-# )[0,1], 3)
+# CALCULATE ALL SUMMARY METRICS
+total_products_count      = len(amazon_data)
+total_categories_count    = amazon_data['main_category'].nunique()
+top_category_name         = amazon_data['main_category'].value_counts().idxmax()
+top_subcategory_name      = amazon_data['sub_category'].value_counts().idxmax()
+overall_avg_rating        = np.round(np.mean(amazon_data['rating_clean'].dropna()), 2)
+overall_avg_discount      = np.round(np.mean(amazon_data['discount_percentage_clean'].dropna()), 1)
+overall_avg_actual_price  = np.round(np.mean(amazon_data['actual_price_clean'].dropna()), 0)
+overall_avg_disc_price    = np.round(np.mean(amazon_data['discounted_price_clean'].dropna()), 0)
+overall_avg_savings       = np.round(np.mean(amazon_data['money_saved'].dropna()), 0)
+highest_discount_product  = amazon_data.nlargest(1, 'discount_percentage_clean')['discount_percentage_clean'].values[0]
+most_reviewed_product     = amazon_data.nlargest(1, 'rating_count_clean')['product_name'].values[0][:40]
+best_rated_category_name  = amazon_data.groupby('main_category')['rating_clean'].mean().idxmax()
+best_discount_category    = amazon_data.groupby('main_category')['discount_percentage_clean'].mean().idxmax()
+excellent_products_count  = len(amazon_data[amazon_data['rating_clean'] >= 4.5])
+budget_products_count     = len(amazon_data[amazon_data['discounted_price_clean'] <= 500])
+high_discount_count       = len(amazon_data[amazon_data['discount_percentage_clean'] >= 70])
+price_rating_corr_val     = np.round(np.corrcoef(
+    amazon_data.dropna(subset=['discounted_price_clean','rating_clean'])['discounted_price_clean'],
+    amazon_data.dropna(subset=['discounted_price_clean','rating_clean'])['rating_clean']
+)[0,1], 3)
 
-# print(f"""
-# 🛒 AMAZON INDIA EDA — COMPLETE FINAL SUMMARY
-# {'=' * 60}
-# 📦 GENERAL
-#    Total Products Analyzed   : {total_products_count:,}
-#    Total Main Categories     : {total_categories_count}
-#    Top Category              : {top_category_name}
-#    Top Sub-Category          : {top_subcategory_name}
+print(f"""
+🛒 AMAZON INDIA EDA — COMPLETE FINAL SUMMARY
+{'=' * 60}
+📦 GENERAL
+   Total Products Analyzed   : {total_products_count:,}
+   Total Main Categories     : {total_categories_count}
+   Top Category              : {top_category_name}
+   Top Sub-Category          : {top_subcategory_name}
 
-# ⭐ RATINGS
-#    Overall Average Rating    : {overall_avg_rating} / 5.0
-#    Excellent Products (4.5+) : {excellent_products_count}
-#    Best Rated Category       : {best_rated_category_name}
+⭐ RATINGS
+   Overall Average Rating    : {overall_avg_rating} / 5.0
+   Excellent Products (4.5+) : {excellent_products_count}
+   Best Rated Category       : {best_rated_category_name}
 
-# 🏷️  DISCOUNTS
-#    Average Discount          : {overall_avg_discount}%
-#    Highest Discount          : {highest_discount_product:.0f}%
-#    Best Discount Category    : {best_discount_category}
-#    Products with 70%+ Off    : {high_discount_count}
+🏷️  DISCOUNTS
+   Average Discount          : {overall_avg_discount}%
+   Highest Discount          : {highest_discount_product:.0f}%
+   Best Discount Category    : {best_discount_category}
+   Products with 70%+ Off    : {high_discount_count}
 
-# 💰 PRICING
-#    Avg Original Price        : ₹{overall_avg_actual_price:,.0f}
-#    Avg Discounted Price      : ₹{overall_avg_disc_price:,.0f}
-#    Avg Money Saved           : ₹{overall_avg_savings:,.0f}
-#    Budget Products (≤₹500)   : {budget_products_count}
+💰 PRICING
+   Avg Original Price        : ₹{overall_avg_actual_price:,.0f}
+   Avg Discounted Price      : ₹{overall_avg_disc_price:,.0f}
+   Avg Money Saved           : ₹{overall_avg_savings:,.0f}
+   Budget Products (≤₹500)   : {budget_products_count}
 
-# 📊 CORRELATIONS
-#    Price vs Rating           : {price_rating_corr_val} (Almost No Link)
-#    Most Reviewed Product     : {most_reviewed_product}...
+📊 CORRELATIONS
+   Price vs Rating           : {price_rating_corr_val} (Almost No Link)
+   Most Reviewed Product     : {most_reviewed_product}...
 
-# {'=' * 60}
-# ✅ ALL 19 CHARTS SAVED SUCCESSFULLY!
-# 🎯 TOTAL INSIGHTS EXTRACTED: 24 STEPS
-# """)
+{'=' * 60}
+
+""")
