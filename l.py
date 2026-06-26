@@ -157,76 +157,76 @@ print(f"Remaining Rows         : {len(amazon_data)}")
 # print("CLEANING COMPLETE!")
 
 
-# ===============================
-# STEP 4: TOP CATEGORIES ANALYSIS
-# ===============================
-print("\n" + "=" * 60)
-print("STEP 4: TOP CATEGORIES ANALYSIS")
-print("=" * 60)
+# # ===============================
+# # STEP 4: TOP CATEGORIES ANALYSIS
+# # ===============================
+# print("\n" + "=" * 60)
+# print("STEP 4: TOP CATEGORIES ANALYSIS")
+# print("=" * 60)
 
-top_categories       = amazon_data['main_category'].value_counts().head(10)
-top_categories_pct   = np.round(top_categories / len(amazon_data) * 100, 1)
+# top_categories       = amazon_data['main_category'].value_counts().head(10)
+# top_categories_pct   = np.round(top_categories / len(amazon_data) * 100, 1)
 
-print(top_categories)
+# print(top_categories)
 
-# PROFESSIONAL HORIZONTAL BAR CHART
-fig, axis = plt.subplots(figsize=(16, 8), facecolor=COLOR_DARK)
-plt.subplots_adjust(left=0.35)
-axis.set_facecolor(COLOR_SURFACE)
+# # PROFESSIONAL HORIZONTAL BAR CHART
+# fig, axis = plt.subplots(figsize=(16, 8), facecolor=COLOR_DARK)
+# plt.subplots_adjust(left=0.35)
+# axis.set_facecolor(COLOR_SURFACE)
 
-# CREATE GRADIENT-LIKE COLORS
-bar_colors = [COLOR_ORANGE if i == 0 else COLOR_BLUE
-              for i in range(len(top_categories))]
+# # CREATE GRADIENT-LIKE COLORS
+# bar_colors = [COLOR_ORANGE if i == 0 else COLOR_BLUE
+#               for i in range(len(top_categories))]
 
-bars = axis.barh(
-    top_categories.index[::-1],
-    top_categories.values[::-1],
-    color=bar_colors[::-1],
-    edgecolor='none',
-    height=0.6
-)
+# bars = axis.barh(
+#     top_categories.index[::-1],
+#     top_categories.values[::-1],
+#     color=bar_colors[::-1],
+#     edgecolor='none',
+#     height=0.6
+# )
 
-axis.set_xlim(0, top_categories.max() * 1.15)
+# axis.set_xlim(0, top_categories.max() * 1.15)
 
-# ADD VALUE LABELS INSIDE BARS
-for bar, value, pct in zip(
-        bars,
-        top_categories.values[::-1],
-        top_categories_pct.values[::-1]):
+# # ADD VALUE LABELS INSIDE BARS
+# for bar, value, pct in zip(
+#         bars,
+#         top_categories.values[::-1],
+#         top_categories_pct.values[::-1]):
 
-    width = bar.get_width()
+#     width = bar.get_width()
 
-    if width > top_categories.max() * 0.15:
-        x_pos = width - 5
-        ha = 'right'
-    else:
-        x_pos = width + 5
-        ha = 'left'
+#     if width > top_categories.max() * 0.15:
+#         x_pos = width - 5
+#         ha = 'right'
+#     else:
+#         x_pos = width + 5
+#         ha = 'left'
 
-    axis.text(
-        x_pos,
-        bar.get_y() + bar.get_height() / 2,
-        f'{value} products ({pct}%)',
-        va='center',
-        ha=ha,
-        color='white',
-        fontweight='bold',
-        fontsize=10
-    )
+#     axis.text(
+#         x_pos,
+#         bar.get_y() + bar.get_height() / 2,
+#         f'{value} products ({pct}%)',
+#         va='center',
+#         ha=ha,
+#         color='white',
+#         fontweight='bold',
+#         fontsize=10
+#     )
 
-axis.set_title('📦 Top 10 Product Categories on Amazon India',
-               fontsize=16, fontweight='bold', color='white',
-               pad=20)
-axis.set_xlabel('Number of Products', fontsize=12)
-axis.grid(axis='x', alpha=0.3)
-axis.spines['top'].set_visible(False)
-axis.spines['right'].set_visible(False)
+# axis.set_title('📦 Top 10 Product Categories on Amazon India',
+#                fontsize=16, fontweight='bold', color='white',
+#                pad=20)
+# axis.set_xlabel('Number of Products', fontsize=12)
+# axis.grid(axis='x', alpha=0.3)
+# axis.spines['top'].set_visible(False)
+# axis.spines['right'].set_visible(False)
 
-plt.tight_layout()
-plt.savefig('01_top_categories.png', dpi=180, bbox_inches='tight',
-            facecolor=COLOR_DARK)
-plt.show()
-print("SAVED: 01_top_categories.png")
+# plt.tight_layout()
+# plt.savefig('01_top_categories.png', dpi=180, bbox_inches='tight',
+#             facecolor=COLOR_DARK)
+# plt.show()
+# print("SAVED: 01_top_categories.png")
 
 
 # # ===========================
@@ -887,12 +887,10 @@ print("SAVED: 01_top_categories.png")
 # print("   represent the best deals on Amazon India.")
 
 
-# # ============================================================
+# # ===================================================
 # # STEP 17: TOP SUB-CATEGORIES ANALYSIS
 # # WHAT IT SHOWS: WHICH SUB-CATEGORY HAS MOST PRODUCTS
-# # str.split('|').str[1] EXTRACTS SECOND LEVEL CATEGORY
-# # CHART TYPE: HORIZONTAL BAR — BEST FOR CATEGORY RANKING
-# # ============================================================
+# # ===================================================
 # print("\n" + "=" * 60)
 # print("STEP 17: TOP SUB-CATEGORIES ANALYSIS")
 # print("=" * 60)
@@ -961,12 +959,10 @@ print("SAVED: 01_top_categories.png")
 # print("   showing strong demand for electronic accessories on Amazon India.")
 
 
-# # ============================================================
+# # =======================================================
 # # STEP 18: HIGH DISCOUNT PRODUCTS ANALYSIS (>= 70%)
 # # WHAT IT SHOWS: WHICH CATEGORIES OFFER MASSIVE DISCOUNTS
-# # boolean indexing FILTERS PRODUCTS WITH DISCOUNT >= 70%
-# # CHART TYPE: BAR — SHOWS COUNT OF HIGH DISCOUNT PRODUCTS
-# # ============================================================
+# # =======================================================
 # print("\n" + "=" * 60)
 # print("STEP 18: HIGH DISCOUNT PRODUCTS ANALYSIS (70%+ OFF)")
 # print("=" * 60)
@@ -1009,6 +1005,7 @@ print("SAVED: 01_top_categories.png")
 # axis.spines['top'].set_visible(False)
 # axis.spines['right'].set_visible(False)
 
+# axis.set_xticklabels(axis.get_xticklabels(), rotation=0, ha='center', fontsize=9)
 # plt.tight_layout()
 # plt.savefig('14_high_discount_products.png', dpi=180, bbox_inches='tight',
 #             facecolor=COLOR_DARK)
@@ -1018,12 +1015,10 @@ print("SAVED: 01_top_categories.png")
 # print("   making them the best categories for deal hunters on Amazon.")
 
 
-# # ============================================================
+# # ========================================================
 # # STEP 19: PRICE vs RATING RELATIONSHIP
 # # WHAT IT SHOWS: DO EXPENSIVE PRODUCTS GET BETTER RATINGS?
-# # np.corrcoef() MEASURES PRICE-RATING RELATIONSHIP
-# # CHART TYPE: SCATTER WITH TREND — REVEALS PRICE-QUALITY LINK
-# # ============================================================
+# # ========================================================
 # print("\n" + "=" * 60)
 # print("STEP 19: DOES PRICE AFFECT RATING?")
 # print("=" * 60)
@@ -1084,12 +1079,10 @@ print("SAVED: 01_top_categories.png")
 # print("   meaning expensive products are NOT necessarily better rated!")
 
 
-# # ============================================================
+# # ========================================================
 # # STEP 20: AVERAGE DISCOUNT BY CATEGORY — RANKED
 # # WHAT IT SHOWS: WHICH CATEGORY GIVES MOST DISCOUNT ON AVG
-# # groupby().mean() CALCULATES AVERAGE DISCOUNT PER CATEGORY
-# # CHART TYPE: HORIZONTAL BAR WITH COLOR — EASY TO RANK
-# # ============================================================
+# # ========================================================
 # print("\n" + "=" * 60)
 # print("STEP 20: AVERAGE DISCOUNT % BY CATEGORY")
 # print("=" * 60)
